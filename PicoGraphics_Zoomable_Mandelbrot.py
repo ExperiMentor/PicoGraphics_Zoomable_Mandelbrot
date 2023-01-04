@@ -4,12 +4,18 @@
 # Math courtesy of:
 # https://www.codingame.com/playgrounds/2358/how-to-plot-the-mandelbrot-set/mandelbrot-set
 
-# Amended by Ian Carbarns
-# 1. To use PicoGraphics, set for 240 x 240 Pimoroni Pico Explorer display
-# 2. Changed to multi-colour display, with easily-adjustable number of colours to use
-# 3. Made "HighRez" operational (temporarily toggles ondoubled resolution)
+# Amended by Ian Carbarns, (c)2023 to:
+# 1. use PicoGraphics, set for 240 x 240 Pimoroni Pico Explorer display
+# 2. multi-colour display, with easily-adjustable number of colours to use
+# 3. have "HighRez" operational (temporarily toggles ondoubled resolution)
 
-#### Setup pen colours to use. Need adjacent numbers to contrast, not be one end of a rainbow.
+# Built on a Pimoroni Pico Explorer base, this uses:
+# a. The display
+# b. The 4 buttons
+# c. 3x potentiometers mounted on the breadboard and connected to ADC0, ADC1 and ADC2
+# d. Raspberry Pi Pico (Wireless is not needed for this project)
+
+#### Setup pen colours to use. Need adjacent colours to contrast, not be one end of a rainbow.
 # With PEN_RGB332, each of R, G, B can be 0-255. But only 3 bits are actually used for R and G and 2 bits for B; max 256 colours in total
 # Rather than assigning all 256 colours, it seems better to assign only a few or primary colours and use them repeatedly
 pen_colour = [[0,0,0],
@@ -25,23 +31,23 @@ from pimoroni import Button, Analog
 
 # USER CONTROLS
 
-# Cursor knobs - move the cursor box
+# Cursor knobs - move the cursor box once the screen has been written
 # Zoom knob - changes size of cursor box.
 # ZoomIn (button A): redraws screen with area of the cursor boxn
 # ZoomOut (button X): redraws twice the area with same centre as currently
 # Centre (button B): redraws same size but recentred on centre of cursor box
-# HiRez (buttonY): temporarily doubles resolution (toggles back). Adds detail into the otherwise blank-looking central area
+# HiRez (button Y): temporarily doubles resolution (toggles back). Adds detail into the otherwise blank-looking central area
 
 # USER SETTINGS
-MAX_ITER = 15 # low values eg 8 are less intricate, but show pattern better. Above 20-30 make little difference, but slower??
+MAX_ITER = 15 # low values eg 8 are less intricate, but show pattern better. Above 20-30 make little difference, but draw more slowly
 # MAX_ITER is temporarily doubled / restored (toggle) by button Y (HiRez)
 print("Max number of Iterations is ", MAX_ITER)
 
 MAX_COLOURS = 10 # will only use the first MAX of the colours specified in the list above
-MAX_COLOURS = min(MAX_COLOURS, len(pen_colour)) # limit to number of coloursthat have been specified
+MAX_COLOURS = min(MAX_COLOURS, len(pen_colour)) # limit to number of colours that have been specified
 print("Max number of colours (before repeating) is ", MAX_COLOURS)
 
-# Set initial area to display. Mandelbrot sets are based on showing colours ciorresponding to number of iterations required
+# Set initial area to display. Mandelbrot sets are based on showing colours corresponding to the number of iterations required
 # to get a simple formula (z = z*z +c) to have a value >2, where c is a complex number with co-ordinates (x,y)
 # The following parameters are the start and end values to display for the real part of c (X-axis) and the imaginary part of c (Y-axis)
 realStart, realEnd = -2.05, 0.55 # -2.05, 1 is nice. Start and End in X direction, but right end looks boring >1
